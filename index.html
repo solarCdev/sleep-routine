@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f7fb" />
+    <title>오늘의 수면 주기 계산기</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="hero">
+        <p class="eyebrow">SLEEP CYCLE EXPLORER</p>
+        <h1>오늘의 수면 주기 계산기</h1>
+        <p class="intro">
+          취침·기상 시각을 바탕으로 1~6주기의 예상 시각과 이론적인 수면 구조를
+          살펴보세요.
+        </p>
+      </header>
+
+      <div class="layout">
+        <section class="card settings">
+          <h2>시간 설정</h2>
+          <div class="switch" role="group" aria-label="계산 방향">
+            <button
+              id="bedMode"
+              class="active"
+              type="button"
+              aria-pressed="true"
+            >
+              취침 시각 기준
+            </button>
+            <button id="wakeMode" type="button" aria-pressed="false">
+              기상 시각 기준
+            </button>
+          </div>
+
+          <div class="field">
+            <label id="timeLabel" for="mainTime">잠자리에 드는 시각</label>
+            <input id="mainTime" type="time" value="23:00" />
+          </div>
+
+          <div class="field" id="latencyField">
+            <label for="latency">잠드는 데 걸리는 시간</label>
+            <div class="input-with-unit">
+              <input
+                id="latency"
+                type="number"
+                min="0"
+                max="120"
+                step="5"
+                value="15"
+              />
+              <span>분</span>
+            </div>
+            <small
+              >잠자리에 든 뒤 실제 잠들기까지 걸리는 시간을 추정합니다.</small
+            >
+          </div>
+
+          <div class="field">
+            <div class="range-head">
+              <label for="cycleLength">가정할 주기 길이</label>
+              <output id="cycleOutput" for="cycleLength">90분</output>
+            </div>
+            <input
+              id="cycleLength"
+              type="range"
+              min="70"
+              max="120"
+              step="5"
+              value="90"
+            />
+            <div class="range-labels">
+              <span>70분</span><span>90분</span><span>120분</span>
+            </div>
+            <small
+              >기본값은 90분입니다. 실제 수면 주기는 개인과 밤의 진행에 따라
+              달라집니다.</small
+            >
+          </div>
+
+          <div class="hint" id="inputHint">
+            입면 소요 시간을 더한 실제 수면 시작 추정 시각부터 주기별 기상
+            후보를 계산합니다.
+          </div>
+        </section>
+
+        <section class="card results-card">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">YOUR SLEEP MODEL</p>
+              <h2>수면 구조와 기상 후보</h2>
+            </div>
+            <span class="model-badge">이론적 모델</span>
+          </div>
+
+          <div class="summary-grid">
+            <article class="summary-item">
+              <span>예상 수면 시간 (6주기)</span
+              ><strong id="sixDuration">9시간</strong>
+            </article>
+            <article class="summary-item">
+              <span>수면 시작 시각</span><strong id="sleepStart">23:15</strong>
+            </article>
+            <article class="summary-item">
+              <span>주기 길이 가정</span><strong id="cycleSummary">90분</strong>
+            </article>
+          </div>
+
+          <div class="chart-title-row">
+            <h3>예상 수면 단계 변화</h3>
+            <span class="chart-unit">수면 시작 후 경과 시간</span>
+          </div>
+          <div class="chart-wrap">
+            <svg
+              id="hypnogram"
+              viewBox="0 0 760 310"
+              role="img"
+              aria-label="시간에 따른 이론적 수면 단계 그래프"
+            ></svg>
+          </div>
+          <div class="legend">
+            <span><i class="dot rem"></i>렘수면</span>
+            <span><i class="dot light"></i>얕은 비렘수면</span>
+            <span><i class="dot deep"></i>깊은 비렘수면</span>
+          </div>
+          <p class="chart-note">
+            수면 초반에는 깊은 비렘수면이 상대적으로 많고, 후반에는 렘수면이
+            길어지는 경향을 단순화한 예시입니다. 실제 개인의 수면 단계를
+            예측하거나 측정한 결과는 아닙니다.
+          </p>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>주기</th>
+                  <th id="resultTimeHead">예상 기상 시각</th>
+                  <th>누적 수면 시간</th>
+                  <th>구간</th>
+                </tr>
+              </thead>
+              <tbody id="cycleRows"></tbody>
+            </table>
+          </div>
+
+          <aside class="disclaimer">
+            <strong>해석할 때 주의하세요.</strong>
+            90분은 설명을 위한 평균적 가정이지 고정된 생리학적 주기가 아닙니다.
+            주기 끝이 반드시 렘수면이나 얕은 수면의 끝과 일치하지 않으며, 수면
+            시간만으로 실제 기상 단계나 상쾌함을 판정할 수 없습니다. 수면 주기를
+            맞추려고 필요한 수면을 줄이지 말고 충분한 수면 시간을 우선하세요.
+          </aside>
+        </section>
+      </div>
+      <footer>수면 주기 교육·탐구용 시뮬레이터</footer>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
